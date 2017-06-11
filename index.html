@@ -44,7 +44,7 @@
       function displayTvInfo() {
 
         var tv = $(this).attr("data-name");
-        var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + tv + "&rating=&apikey=dc6zaTOxFJmzC&tag=tv";
+        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + tv + "&rating=&apikey=dc6zaTOxFJmzC&tag=tv";
 
         // ajax call
         $.ajax({
@@ -66,10 +66,10 @@
 
 
           // Retrieving the URL for the gif
-          var gifUrl = response.data.slug.images.fixed_height.url;
+          var gifUrl = response.data.image_original_url;
 
 		  // Creating and storing an image tag
-          var tvGif = $("<img>").attr("src", gifURL);
+          var tvGif = $("<img>").attr("src", gifUrl);
 
           // Appending the image
           tvDiv.append(tvGif);
