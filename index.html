@@ -41,12 +41,10 @@
       var tvShows = ["The 100", "Game of Thrones", "Mr. Robot", "Broad City", "Stranger Things"];
 
       // displayTvInfo function HTML to correct content
-      
+      function displayTvInfo() {
 
         var tv = $(this).attr("data-name");
         var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + tv + "&api_key=dc6zaTOxFJmzC";
-
-        function displayTvInfo() {
 
         // ajax call
         $.ajax({
@@ -66,7 +64,7 @@
 
 
           // Retrieving the URL for the gif
-          var gifUrl = response.data[0].bitly_url;
+          var gifUrl = response.data.image_fixed_height_url;
 
 		  // Creating and storing an image tag
           var tvGif = $("<img>")
