@@ -16,7 +16,7 @@
 
 <body>
 	<div class="container">
-    <h1>Gif Search</h1>
+    <h1>TV Show Gif Search</h1>
 
     <!-- TV Shows here -->
     <div id="tv-view"></div>
@@ -33,7 +33,7 @@
     </form>
 
     <script
-  	src="https://code.jquery.com/jquery-3.2.1.min.js"
+  	src="http://code.jquery.com/jquery-3.2.1.min.js"
   	integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
   	crossorigin="anonymous"></script>
     <script type="text/javascript">
@@ -41,10 +41,12 @@
       var tvShows = ["The 100", "Game of Thrones", "Mr. Robot", "Broad City", "Stranger Things"];
 
       // displayTvInfo function HTML to correct content
-      function displayTvInfo() {
+      
 
         var tv = $(this).attr("data-name");
-        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + tv + "&rating=&apikey=dc6zaTOxFJmzC&tag=tv";
+        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + tv + "&api_key=dc6zaTOxFJmzC";
+
+        function displayTvInfo() {
 
         // ajax call
         $.ajax({
@@ -55,21 +57,23 @@
           // div for tv show
           var tvDiv = $("<div class='tv'>");
 
-          // Storing the rating data
-          var rating = response.rating;
+          // // Storing the rating data
+          // var rating = response.rating;
 
-          // Creating an element to have the rating displayed
-          var p1 = $("<p>").text("Rating: " + rating);
+          // // Creating an element to have the rating displayed
+          // var p1 = $("<p>").text("Rating: " + rating);
 
-          // Displaying the rating
-          tvDiv.append(p1);
 
 
           // Retrieving the URL for the gif
-          var gifUrl = response.data.image_original_url;
+          var gifUrl = response.data[0].bitly_url;
 
 		  // Creating and storing an image tag
-          var tvGif = $("<img>").attr("src", gifUrl);
+          var tvGif = $("<img>")
+
+          tvGif.attr("src", gifUrl);
+          tvGif.attr("alt", "gif image");
+
 
           // Appending the image
           tvDiv.append(tvGif);
