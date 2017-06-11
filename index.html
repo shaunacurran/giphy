@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>TV Shows</title>
+	<style type="text/css">
+    button,
+    div,
+    form,
+    input {
+      margin: 10px;
+    }
+  </style>
+</head>
+
+<body>
+	<div class="container">
+    <h1>Gif Search</h1>
+
+    <!-- TV Shows here -->
+    <div id="tv-view"></div>
+
+    <!-- Rendered Buttons will get Dumped Here  -->
+    <div id="buttons-view"></div>
+
+    <form id="tv-form">
+      <label for="tv-input">Add a TV Show</label>
+      <input type="text" id="tv-input"><br>
+
+      <!-- Button triggers new tv show added -->
+      <input id="add-tv" type="submit" value="Add">
+    </form>
+
+    <script
+  	src="https://code.jquery.com/jquery-3.2.1.min.js"
+  	integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  	crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      // first array of tv shows
+      var tvShows = ["The 100", "Game of Thrones", "Mr. Robot", "Broad City", "Stranger Things"];
+
+      // displayTvInfo function HTML to correct content
+      function displayTvInfo() {
+
+        var tv = $(this).attr("data-name");
+        var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + tv + "&rating=&apikey=dc6zaTOxFJmzC&tag=tv";
+
+        // ajax call
+        $.ajax({
+          url: queryURL,
+          method: "GET"
+        }).done(function(response) {
+
+          // div for tv show
+          var tvDiv = $("<div class='tv'>");
+
+          // Storing the rating data
+          var rating = response.rating;
+
+          // Creating an element to have the rating displayed
+          var p1 = $("<p>").text("Rating: " + rating);
+
+          // Displaying the rating
+          tvDiv.append(p1);
+
+
+          // Retrieving the URL for the gif
+          var gifUrl = response.data.slug.images.fixed_height.url;
+
+		  // Creating and storing an image tag
+          var tvGif = $("<img>").attr("src", gifURL);
+
+          // Appending the image
+          tvDiv.append(tvGif);
+
+         // Prepending the tv gif to the giv div
+        $("#tv-view").prepend(tvGif);
+        });
+
+      }
+
+      // Function for displaying movie data
+      function renderButtons() {
+
+        // Deleting the movies prior to adding new movies
+        // (this is necessary otherwise you will have repeat buttons)
+        $("#buttons-view").empty();
+
+        // Looping through the array of tv shows
+        for (var i = 0; i < tvShows.length; i++) {
+
+          // Then dynamicaly generating buttons for each movie in the array
+          // This code $("<button>") is all jQuery needs to create the beginning and end tag. (<button></button>)
+          var a = $("<button>");
+          // Adding a class of movie to our button
+          a.addClass("tv");
+          // Adding a data-attribute
+          a.attr("data-name", tvShows[i]);
+          // Providing the initial button text
+          a.text(tvShows[i]);
+          // Adding the button to the buttons-view div
+          $("#buttons-view").append(a);
+        }
+      }
+
+      // This function handles events where a movie button is clicked
+      $("#add-tv").on("click", function(event) {
+        event.preventDefault();
+        // This line grabs the input from the textbox
+        var tv = $("#tv-input").val().trim();
+
+        // Adding movie from the textbox to our array
+        tvShows.push(tv);
+
+        // Calling renderButtons which handles the processing of our movie array
+        renderButtons();
+      });
+
+      // Adding a click event listener to all elements with a class of "movie"
+      $(document).on("click", ".tv", displayTvInfo);
+
+      // Calling the renderButtons function to display the intial buttons
+      renderButtons();
+    </script>
+  </div>
+</body>
+</html>
